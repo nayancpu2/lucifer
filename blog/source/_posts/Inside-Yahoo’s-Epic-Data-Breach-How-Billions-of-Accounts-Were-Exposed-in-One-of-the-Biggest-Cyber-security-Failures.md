@@ -63,7 +63,7 @@ Start the Client:
 
   Save the client code in a file named tcp_client.py.
     In a new terminal, run:
+    
 ```
 python tcp_client.py
-
 ```
