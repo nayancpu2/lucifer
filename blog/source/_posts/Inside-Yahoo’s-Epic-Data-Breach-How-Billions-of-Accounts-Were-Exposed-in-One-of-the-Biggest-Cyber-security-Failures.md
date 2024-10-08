@@ -5,58 +5,30 @@ date: 2024-10-07 21:59:18
 tags:
 ---
 
-1. Import Necessary Modules:
-Python
+To create a TCP connection using Python, you can use the built-in socket library. Here’s a simple example that demonstrates how to create both a TCP client and server. 
 
+[TCP Server]
+
+
+```
 import socket
 
-Use code with caution.
+def tcp_server(host='127.0.0.1', port=65432):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+        server_socket.bind((host, port))
+        server_socket.listen()
+        print(f'Server listening on {host}:{port}')
 
-2. Create a Socket Object:
-Python
+        conn, addr = server_socket.accept()
+        with conn:
+            print(f'Connected by {addr}')
+            while True:
+                data = conn.recv(1024)
+                if not data:
+                    break
+                print(f'Received: {data.decode()}')
+                conn.sendall(data)  # Echo back the received data
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-Use code with caution.
-
-    socket.AF_INET: Specifies the Internet Protocol (IP) family for network communication.
-    socket.SOCK_STREAM: Indicates that you're using a TCP socket for reliable, connection-oriented communication.
-
-3. Bind the Socket to an Address and Port:
-Python
-
-server_address = ('localhost', 12345)
-sock.bind(server_address)
-
-Use code with caution.
-
-    server_address: A tuple containing the IP address (or hostname) and port number where the server will listen for connections.
-    sock.bind(): Associates the socket with the specified address and port.
-
-4. Listen for Incoming Connections:
-Python
-
-sock.listen(1)
-
-Use code with caution.
-
-    sock.listen(): Sets the maximum number of connections that can be pending at once. In this case, it's set to 1.
-
-5. Accept Incoming Connections:
-Python
-
-while True:
-    connection, client_address = sock.accept()
-    print(f"Connection from {client_address}")
-
-    # Process data from the client
-    data = connection.recv(1024)
-    if not data:
-        break
-    print(f"Received: {data}")
-
-    # Send a response back to the client
-    message = b"Hello, world!"
-    connection.sendall(message)
-
-    connection.close()
+if __name__ == '__main__':
+    tcp_server()
+```
